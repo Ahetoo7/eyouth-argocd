@@ -1,32 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
-
 kind: Application
-
 metadata:
   name: projectapp
-
 spec:
-
   project: default
-
   source:
-
     repoURL: https://github.com/Ahetoo7/eyouth-argocd
-
     targetRevision: HEAD
-
-    path: apps/projectapp
-
+    path: apps/nginx3
   destination:
-
     server: https://kubernetes.default.svc
-
-    namespace: projectapp
-
+    namespace: demo
   syncPolicy:
-
     automated:
-
       prune: true
-
       selfHeal: true
