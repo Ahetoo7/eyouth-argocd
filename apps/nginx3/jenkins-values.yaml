@@ -1,0 +1,27 @@
+# values.yaml — adjusted for AWS EKS LoadBalancer
+
+controller:
+  serviceType: LoadBalancer
+
+  # Preserve client source IP, avoids the extra hop NLB->kube-proxy->pod
+  serviceExternalTrafficPolicy: Local
+
+  # AWS Network Load Balancer (NLB) annotations — recommended over the
+  # classic/legacy ELB for new EKS deployments.
+  serviceAnnotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing" # use "internal" for a private LB
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "8080"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/login"
+
+  # Restrict who can reach the LB — replace with your real CIDR(s)
+  # (the chart default of 0.0.0.0/0 is open to the entire internet)
+  loadBalancerSourceRanges:
+  - "203.0.113.0/24" # <-- replace with your office/VPN CIDR(s)
+  # Optionally pin a specific EIP-backed NLB (rarely needed; usually
+  # you let AWS provision the NLB and just point DNS at its hostname)
+  # loadBalancerIP:
+
+  agentListenerServiceType: "ClusterIP" # keep internal unless agents connect from outside the cluster
