@@ -17,6 +17,7 @@ spec:
       containers:
       - name: jenkins
         image: michaelfawzy/jenkins-custom:latest
+        imagePullPolicy: Always
         securityContext:
           runAsUser: 0
         ports:
