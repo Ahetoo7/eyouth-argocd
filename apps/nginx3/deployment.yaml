@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: michaelfawzy/myapp:28
+          image: michaelfawzy/myapp:5
           ports:
             - containerPort: 8080
